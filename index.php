@@ -1,6 +1,6 @@
 <?php
     include_once("classes/cls.pluginapi.php");
-
+    include_once(dirname(__FILE__) . "/db-wrapper.php");
     
     function parse_message($message, $user_queries)
     {
@@ -14,11 +14,15 @@
     
     	foreach($user_queries as $query) {
     		//Remove the [SEARCH], to allow for a matcher
-    		$preg_query = str_replace("[SEARCH]", "([SEARCH])", $query);
-    		preg_match('/' . $preg_query . '/', $message, $matches);
+    		$preg_query = str_replace("[SEARCH]", "(.*)", $query);
+    		$preg_query = '/^' . $preg_query . '/i';
+    		echo "Preg query:" . $preg_query .  "  Running against: " . $message . "\n";
+    		preg_match($preg_query, $message, $matches);
     		
-    		if($matches[0]) {
-    			return $matches[0];
+    		print_r($matches);
+    		
+    		if($matches[1]) {
+    			return $matches[1];
     		} else {
     			return false;
     		}
@@ -27,6 +31,55 @@
     
     
     }
+    
+    
+    //TESTING code 
+    /*
+    if(!isset($db_searcher_config)) {
+		//Get global plugin config - but only once
+		global $cnf;
+		
+		$path = dirname(__FILE__) . "/config/config.json";
+		
+		
+		$data = file_get_contents($path);
+		
+		if($data) {
+			$db_searcher_config = json_decode($data, true);
+			if(!isset($db_searcher_config)) {
+				echo "Error: db_searcher config/config.json is not valid JSON.";
+				exit(0);
+			}
+		} else {
+			echo "Error: Missing config/config.json in db_searcher plugin.";
+			exit(0);
+		}
+	}
+            
+    $user_queries = $db_searcher_config['forums'][0]['userQueries'];
+    print_r($user_queries);
+    $our_search = parse_message("Detail this ahoy", $user_queries);
+    echo "Result: " . $our_search . "\n";
+    
+    
+    if($our_search !== false) {
+		//Yes, we were a matching request - run a query against the database and respond 
+		
+		//Replace the string [SEARCH] in the SQL, with our actual search term
+		$sql_query = "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1";		//TESTING
+		
+		$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
+		echo "Final sql = " . $final_sql . "\n";
+		
+		$new_message = run_query($final_sql, $db_searcher_config['databases'][$db_id]);
+		
+		echo "Posting new message: " . $new_message . "\n";
+	
+	
+	 }       
+    
+    //--- END OF TESTING
+    */
     
     
     
