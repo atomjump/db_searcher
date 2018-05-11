@@ -1,0 +1,61 @@
+{
+    "phpPath": "/usr/bin/php",
+    "staging": false,
+    "serverPath": "your/atomjump/loop/server/path/",
+    "databases" : [
+    	{
+    		"dbId": "database_name",
+    		"dsnHere": "dnsName",
+    		"username": "databasename",
+    		"password": "password",
+    		"host": "host",
+    		"useODBC": true
+    	}    
+    ],
+    "forums": [
+        {
+            "aj": "aj_your_forum",
+            "dbId" : "database_name",
+            "userQueries" : [
+            	"detail [SEARCH]",
+            	"details [SEARCH]",
+            	"detail on [SEARCH]",
+            	"details on [SEARCH]",
+            	"give me details on [SEARCH]",
+            	"please give me details on [SEARCH]"
+            ],
+            "sqlQuery": "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
+            "helperName": "Your company",
+            "helperEmail": "yourname@yourcompany.com",
+            "comeBackWithin": 86400
+        }, 
+        {
+            "aj": "default",
+            "dbId" : "database_name",
+            "userQueries" : [
+            	"detail [SEARCH]",
+            	"details [SEARCH]",
+            	"detail on [SEARCH]",
+            	"details on [SEARCH]",
+            	"give me details on [SEARCH]",
+            	"please give me details on [SEARCH]"
+            ],
+            "sqlQuery": "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
+            "helperName": "Your company",
+            "helperEmail": "yourname@yourcompany.com",
+            "comeBackWithin": 86400
+        }, 
+        {
+            "aj": "aj_your_forum",
+            "dbId" : "database_name",
+            "userQueries" : [
+            	"Text strings representing the whole message as entered by a user submitting a message. The entry with [SEARCH] becomes a part of the SQL query."
+            ],
+            "sqlQuery": "Any SQL query which responds with a single section of text as the field 'result'",
+            "helperName": "Any helper name for this forum",
+            "helperEmail": "This email must be set, and must not be anyone else's email.",
+            "comeBackWithin": 86400        }
+    ]
+
+
+}
