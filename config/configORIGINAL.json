@@ -6,6 +6,7 @@
     	{
     		"dbId": "database_name",
     		"dsnHere": "dnsName",
+    		"dbname": "dbname",
     		"username": "databasename",
     		"password": "password",
     		"host": "host",

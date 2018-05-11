@@ -11,7 +11,7 @@ function odbc_db_connect($json) {
 		odbc_autocommit($dbh, true);
 		return $dbh;
 	} else {
-		$dbh = dbconnect($json['host'], $json['username'], $json['password']);	//Use the parent method
+		$dbh = dbconnect($json['host'], $json['username'], $json['password'], $json['dbname']);	//Use the parent method
 		return $dbh;
 	}
 }
@@ -98,7 +98,7 @@ function odbc_db_code_checks($json) {
 	if($json['useODBC'] == true) {
 		return function_exists("odbc_connect");
 	} else {
-		return function_exists("sqlsrv_connect");
+		return true;
 	}
 }
 
