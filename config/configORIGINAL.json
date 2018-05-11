@@ -26,8 +26,7 @@
             ],
             "sqlQuery": "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
             "helperName": "Your company",
-            "helperEmail": "yourname@yourcompany.com",
-            "comeBackWithin": 86400
+            "helperEmail": "yourname@yourcompany.com"
         }, 
         {
             "aj": "default",
@@ -42,8 +41,7 @@
             ],
             "sqlQuery": "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
             "helperName": "Your company",
-            "helperEmail": "yourname@yourcompany.com",
-            "comeBackWithin": 86400
+            "helperEmail": "yourname@yourcompany.com"
         }, 
         {
             "aj": "aj_your_forum",
@@ -53,8 +51,8 @@
             ],
             "sqlQuery": "Any SQL query which responds with a single section of text as the field 'result'",
             "helperName": "Any helper name for this forum",
-            "helperEmail": "This email must be set, and must not be anyone else's email.",
-            "comeBackWithin": 86400        }
+            "helperEmail": "This email must be set, and must not be anyone else's email."
+        }
     ]
 
 
