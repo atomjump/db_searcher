@@ -2,6 +2,8 @@
     include_once("classes/cls.pluginapi.php");
     include_once(dirname(__FILE__) . "/db-wrapper.php");
     
+
+    
     function parse_message($message, $user_queries)
     {
     	//Reads and looks through each potential user query for a pattern match in the incoming
@@ -83,7 +85,7 @@
     
     
     
-    function run_query($sql, $json) 
+    function run_query($sql, $json, $no_results_msg = null) 
     {
     
 		if(odbc_db_code_checks($json)) {
@@ -102,12 +104,15 @@
 					echo "\nQuery:  " . $sql;
 					$result = odbc_db_query($json, $dbh, $sql);
 					if (!$result){
-
-						return "Sorry, I could not query the remote database. Please check your user has 'read' permissions.";
+						$msg = "Sorry, there were no results";
+						if(isset($no_results_msg)) {
+							$msg = $no_results_msg;
+						}	
+						return $msg;
 					} else {
 	
 						//Success!
-						return $result['result'];
+						return $result;
 					}
 				}
 			} catch (Exception $e) {
@@ -186,6 +191,7 @@
                     $helper_email = $db_searcher_config['forums'][$cnt]['helperEmail'];
                     $sql_query = $db_searcher_config['forums'][$cnt]['sqlQuery'];
 					$db_id = $db_searcher_config['forums'][$cnt]['dbId'];
+					$no_result = $db_searcher_config['forums'][$cnt]['noResult'];
                     $send = true;
                 } else {
                     if($db_searcher_config['forums'][$cnt]['aj'] == 'default') {
@@ -194,6 +200,7 @@
                         $helper_email = $db_searcher_config['forums'][$cnt]['helperEmail'];
                         $sql_query = $db_searcher_config['forums'][$cnt]['sqlQuery'];
 						$db_id = $db_searcher_config['forums'][$cnt]['dbId'];
+						$no_result = $db_searcher_config['forums'][$cnt]['noResult'];
                         $send = true;
                     }
                 }
@@ -222,6 +229,7 @@
 						$helper_email = $forum_config->helperEmail;
 						$sql_query = $forum_config->sqlQuery;
 						$db_id = $forum_config->dbId;
+						$no_result = $forum_config->noResult;
             		}
             
             	}
@@ -254,9 +262,19 @@
                         	
                         	//Replace the string [SEARCH] in the SQL, with our actual search term
                         	$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
-                        	$new_message = run_query($final_sql, $db_searcher_config['databases'][$db_id]);
+                        	$new_messages = run_query($final_sql, $db_searcher_config['databases'][$db_id], $no_result);
+                        	if(isset($new_messages[0])) {
+                        		$cnt = 0;
+                        		foreach($new_messages as $new_message) {
+                        			if($cnt < $db_searcher_config['maxDisplayMessages']) {
                         
-                       		$new_message_id = $api->new_message($helper, $new_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+                       					$new_message_id = $api->new_message($helper, $new_message['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+                       				} else {
+                       					//Exit the loop
+                       					break;
+                       				}
+                       				$cnt++;
+                       			}
                         
                        	 }                        
                     }	//End of if send

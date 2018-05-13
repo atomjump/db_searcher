@@ -2,6 +2,7 @@
     "phpPath": "/usr/bin/php",
     "staging": false,
     "serverPath": "your/atomjump/loop/server/path/",
+    "maxDisplayMessages" : 10,
     "databases" : [
     	{
     		"dbId": "database_name",
@@ -26,6 +27,7 @@
             	"please give me details on [SEARCH]"
             ],
             "sqlQuery": "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
+            "noResult": "Sorry, there were no results.",
             "helperName": "Your company",
             "helperEmail": "yourname@yourcompany.com"
         }, 
@@ -41,6 +43,7 @@
             	"please give me details on [SEARCH]"
             ],
             "sqlQuery": "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
+            "noResult": "Sorry, there were no results.",
             "helperName": "Your company",
             "helperEmail": "yourname@yourcompany.com"
         }, 
@@ -51,6 +54,7 @@
             	"Text strings representing the whole message as entered by a user submitting a message. The entry with [SEARCH] becomes a part of the SQL query."
             ],
             "sqlQuery": "Any SQL query which responds with a single section of text as the field 'result'",
+            "noResult": "Message when there are no results",
             "helperName": "Any helper name for this forum",
             "helperEmail": "This email must be set, and must not be anyone else's email."
         }
