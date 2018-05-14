@@ -310,7 +310,17 @@
 								
 								//Now send the messages. Switch back to the main database.
 								odbc_dbclose();			//Clear off our current database connection again, to allow a reconnect
-								make_writable_db();
+								//Reconnect to our main database
+								global $db_host;
+								global $db_username;
+								global $db_password;
+								global $db_name;
+								global $db;
+								
+								$db = dbconnect($db_host, $db_username, $db_password);
+								dbselect($db_name);
+								db_set_charset('utf8');
+								db_misc();
 								
 								error_log("db is now:" . json_encode($db));
 								
