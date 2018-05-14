@@ -17,7 +17,7 @@
     	foreach($user_queries as $query) {
     		//Remove the [SEARCH], to allow for a matcher
     		$preg_query = str_replace("[SEARCH]", "(.*)", $query);
-    		$preg_query = '/^' . $preg_query . '/i';
+    		$preg_query = '/\:' . $preg_query . '/i';
     		echo "Preg query:" . $preg_query .  "  Running against: " . $message . "\n";
     		preg_match($preg_query, $message, $matches);
     		
@@ -280,7 +280,7 @@
                         	//revert back to our own database 
                         	make_writable_db();
                         	
-                        	error_log("New messages:" . print_r($new_messages));
+                        	error_log("New messages 0:" . json_encode($new_messages[0]));
                         	
                         	if(isset($new_messages[0])) {
                         		$cnt = 0;
