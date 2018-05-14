@@ -302,7 +302,7 @@
 								//Run the db query
 								$new_messages = run_query($final_sql, $db, $no_result);
 							
-								
+								error_log("returned from query:" . json_encode($new_messages));
 							
 								if($new_message = db_fetch_array($new_messages)) {
 									
