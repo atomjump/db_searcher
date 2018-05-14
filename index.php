@@ -330,8 +330,6 @@
 										$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 									}
 								
-									error_log("About to complete parallel calls");
-									$api->complete_parallel_calls();
 								}
 															
 								 
@@ -346,9 +344,9 @@
             
             return true;
 
-        }
+        } //End of on_message
     
-    }
+    }	//End of class
 
     
 ?>
