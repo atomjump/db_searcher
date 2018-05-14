@@ -300,7 +300,7 @@
 								$sender_ip = $api->get_current_user_ip();
 								
 								//Run the db query
-								$new_messages = run_query($final_sql, $db, $no_result);
+								$new_messages = run_query($final_sql, $mydb, $no_result);
 							
 								error_log("returned from query:" . json_encode($new_messages));
 							
