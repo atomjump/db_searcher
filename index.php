@@ -295,8 +295,13 @@
 									$new_message_id = $api->new_message($helper, $new_messages[0]['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 								}
 							
-								error_log("New messages 0:" . json_encode($new_messages));
+								error_log("Message has been queued successfully.");
 								
+								 //revert back to our own database 
+								 make_writable_db();
+								
+								$api->complete_parallel_calls();
+							
 								  
 								  
 								
@@ -304,8 +309,7 @@
 								
 								
 								 
-								 //revert back to our own database 
-								 make_writable_db();
+								
 								 
 							  }
                        	 }   //End of our search                     
