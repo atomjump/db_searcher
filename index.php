@@ -308,7 +308,7 @@
 									
 								} else {
 									//Do a no result or error message
-									$new_message_id = $api->new_message($helper, $new_messages[0]['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+									$all_messages[] = $new_message[0];
 								}
 							
 								error_log("Message has been queued successfully.");
