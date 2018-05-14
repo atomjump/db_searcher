@@ -288,7 +288,7 @@
                         	error_log("Final sql:" . $final_sql);
                         	error_log("DB id:" . $db_id);
                         	
-                        	$db = array();
+                        	$mydb = array();
                         	foreach($db_searcher_config['databases'] as $database) {
                         		if($database['dbId'] == $db_id) {
                         			$db = $database;
@@ -296,7 +296,7 @@
                         		}
                         	}
                         	
-                        	if($db) {
+                        	if($mydb) {
 								$sender_ip = $api->get_current_user_ip();
 								
 								//Run the db query

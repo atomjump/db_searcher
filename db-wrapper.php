@@ -19,8 +19,10 @@ function odbc_db_connect($json) {
 
 function odbc_db_query($json, $dbh, $sql) {
 	if($json['useODBC'] == true) {
+		
 		return odbc_exec($dbh, $sql);
 	} else {
+		error_log("Running dbquery() on " . $sql);
 		return dbquery($sql);
 	}
 }
