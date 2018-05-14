@@ -343,6 +343,7 @@
 									foreach($all_messages as $this_message) {
 										error_log("Result about to message: " . $this_message);
 										
+										$this_message = highlight_keywords($this_message, $our_search);
 										
 										
 										//$_SESSION['db_search_result' . $sender_id . '_' . $message_forum_id . urlencode($our_search)] = true;
@@ -355,7 +356,8 @@
 															
 								 
 							  }
-                       	 }   //End of if send                   
+                       	 }   //End of our search
+                    }  //End of our send                  
                     	
                 }     //End of helper
             	
