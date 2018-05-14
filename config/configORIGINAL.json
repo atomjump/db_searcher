@@ -26,7 +26,7 @@
             	"give me details on [SEARCH]",
             	"please give me details on [SEARCH]"
             ],
-            "sqlQuery": "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
+            "sqlQuery": "SELECT CONCAT('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
             "noResult": "Sorry, there were no results.",
             "helperName": "Your company",
             "helperEmail": "yourname@yourcompany.com"
@@ -42,7 +42,7 @@
             	"give me details on [SEARCH]",
             	"please give me details on [SEARCH]"
             ],
-            "sqlQuery": "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
+            "sqlQuery": "SELECT CONCAT('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
             "noResult": "Sorry, there were no results.",
             "helperName": "Your company",
             "helperEmail": "yourname@yourcompany.com"
