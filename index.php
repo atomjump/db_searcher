@@ -278,14 +278,20 @@
 									
 									$new_message_id = $api->new_message($helper, $new_message[0], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 									
+									error_log("Finished sending 1st message");
+									
 									$cnt = 1;
 									
 									//Do any further results
 									while($new_message = odbc_db_fetch_array($new_messages)) {
 										if($cnt < $db_searcher_config['maxDisplayMessages']) {
+											error_log("Result about to message: " . $new_message[0]);
+									
 											$new_message_id = $api->new_message($helper, $new_message[0], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 											
-										} 
+										} else {
+											break;
+										}
 										$cnt++;
 									}
 									
