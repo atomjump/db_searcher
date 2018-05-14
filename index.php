@@ -15,6 +15,8 @@
     	//Note: 'details on' is a case insensitive search
     	
     	$message = trim($message);
+    	$message = str_replace("\\\\r", '', $message);
+    	$message = str_replace("\\\\n", '', $message);
     
     	foreach($user_queries as $query) {
     		//Remove the [SEARCH], to allow for a matcher
@@ -42,7 +44,7 @@
     
     
     //TESTING code 
-    /*
+    
     if(!isset($db_searcher_config)) {
 		//Get global plugin config - but only once
 		global $cnf;
@@ -85,7 +87,7 @@
 	
 	
 	 }       
-    */
+    
     //--- END OF TESTING
     
     
@@ -101,7 +103,8 @@
 				if(!$dbh) {
 					$errmsg = odbc_db_err_msg($json);
 		
-					return "Sorry, I could not connect to the database. Please check your username, password, database file and host parameters.";
+					return array( 0 => array('result' => "Sorry, I could not connect to the database. Please check your username, password, database file and host parameters."));
+					
 				} else {
 	
 					//Try running the query
@@ -114,7 +117,9 @@
 						if(isset($no_results_msg)) {
 							$msg = $no_results_msg;
 						}	
-						return array( 0 => array('result' => $msg));
+						$result = array( 0 => array('result' => $msg));
+						print_r($result);
+						return $result;
 					} else {
 	
 						//Success!
@@ -122,11 +127,11 @@
 					}
 				}
 			} catch (Exception $e) {
-				return "Sorry, your installation is incomplete, and cannot use the database connection software.";
+				return array( 0 => array('result' => "Sorry, your installation is incomplete, and cannot use the database connection software."));
 
 			}
 		} else {
-			return "Sorry, your installation is not working, and cannot connect to your database. Are you sure your database is installed on this machine?";	
+			return array( 0 => array('result' => "Sorry, your installation is not working, and cannot connect to your database. Are you sure your database is installed on this machine?"));	
 		}
 	}
     
@@ -286,7 +291,7 @@
                         	//revert back to our own database 
                         	make_writable_db();
                         	
-                        	error_log("New messages 0:" . json_encode($new_messages[0]));
+                        	error_log("New messages 0:" . json_encode($new_messages));
                         	
                         	if(isset($new_messages[0])) {
                         		$cnt = 0;
