@@ -13,6 +13,7 @@
     	// "details on [SEARCH]"
     	//And replies with the value of [SEARCH], in this case 'test'
     	//Note: 'details on' is a case insensitive search
+    	$message = trim($message);
     
     	foreach($user_queries as $query) {
     		//Remove the [SEARCH], to allow for a matcher
@@ -36,7 +37,7 @@
     
     
     //TESTING code 
-    /*
+    
     if(!isset($db_searcher_config)) {
 		//Get global plugin config - but only once
 		global $cnf;
@@ -60,7 +61,7 @@
             
     $user_queries = $db_searcher_config['forums'][0]['userQueries'];
     print_r($user_queries);
-    $our_search = parse_message("Detail this ahoy", $user_queries);
+    $our_search = parse_message("Aha: Detail this ahoy\r\n", $user_queries);
     echo "Result: " . $our_search . "\n";
     
     
@@ -68,7 +69,7 @@
 		//Yes, we were a matching request - run a query against the database and respond 
 		
 		//Replace the string [SEARCH] in the SQL, with our actual search term
-		$sql_query = "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1";		//TESTING
+		$sql_query = "SELECT CONCAT('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1";		//TESTING
 		
 		$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
 		echo "Final sql = " . $final_sql . "\n";
@@ -81,7 +82,7 @@
 	 }       
     
     //--- END OF TESTING
-    */
+    
     
     
     
@@ -108,7 +109,7 @@
 						if(isset($no_results_msg)) {
 							$msg = $no_results_msg;
 						}	
-						return array('result' => $msg);
+						return array( 0 => array('result' => $msg));
 					} else {
 	
 						//Success!
