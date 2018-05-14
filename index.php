@@ -302,7 +302,9 @@
 								make_writable_db();
 							
 								error_log("New messages 0:" . json_encode($new_messages));
-							
+								$sender_ip = $api->get_current_user_ip();
+								  
+								  
 								if(isset($new_messages[0])) {
 									$cnt = 0;
 									foreach($new_messages as $new_message) {
