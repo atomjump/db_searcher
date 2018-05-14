@@ -125,7 +125,7 @@
 						print_r($result);
 						return $result;
 					} else {
-	
+						
 						//Success!
 						return $result;
 					}
@@ -298,28 +298,45 @@
                         	}
                         	
                         	if($db) {
+								$sender_ip = $api->get_current_user_ip();
+								
+								//Run the db query
 								$new_messages = run_query($final_sql, $db, $no_result);
 							
-								//revert back to our own database 
-								make_writable_db();
+								
+							
+								if($new_message = db_fetch_array($new_messages)) {
+									
+									$new_message_id = $api->new_message($helper, $new_message['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+									
+									$cnt = 1;
+									
+									//Do any further results
+									while($new_message = db_fetch_array($new_messages)) {
+										if($cnt < $db_searcher_config['maxDisplayMessages']) {
+											$new_message_id = $api->new_message($helper, $new_message['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+											
+										} 
+									}
+									
+									
+								} else {
+									//Do a no result or error message
+									$new_message_id = $api->new_message($helper, $new_message['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+								}
 							
 								error_log("New messages 0:" . json_encode($new_messages));
-								$sender_ip = $api->get_current_user_ip();
+								
 								  
 								  
-								if(isset($new_messages[0])) {
-									$cnt = 0;
-									foreach($new_messages as $new_message) {
-										if($cnt < $db_searcher_config['maxDisplayMessages']) {
-						
-											$new_message_id = $api->new_message($helper, $new_message['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
-										} else {
-											//Exit the loop
-											break;
-										}
-										$cnt++;
-									}
-								 }
+								
+										
+								
+								
+								 
+								 //revert back to our own database 
+								 make_writable_db();
+								 
 							  }
                        	 }   //End of our search                     
                     	
