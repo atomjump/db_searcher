@@ -22,7 +22,7 @@
     		//Remove the [SEARCH], to allow for a matcher
     		$preg_query = str_replace("[SEARCH]", "(.*)", $query);
     		$preg_query = '/\:\s' . $preg_query . '/i';
-    		error_log "Preg query:" . $preg_query .  "  Running against: " . $message . "\n";
+    		error_log("Preg query:" . $preg_query .  "  Running against: " . $message . "\n");
     		preg_match($preg_query, $message, $matches);
     		
     		print_r($matches);
