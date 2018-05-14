@@ -322,7 +322,7 @@
 									
 								} else {
 									//Do a no result or error message
-									$new_message_id = $api->new_message($helper, $new_messages['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+									$new_message_id = $api->new_message($helper, $new_messages[0]['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 								}
 							
 								error_log("New messages 0:" . json_encode($new_messages));
