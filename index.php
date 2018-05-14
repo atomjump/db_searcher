@@ -41,8 +41,18 @@
     
     }
     
+	//With thanks to Vincy https://phppot.com/php/highlighting-keywords-in-search-results-with-php/
+    function highlight_keywords($text, $keyword) {
+		$wordsAry = explode(" ", $keyword);
+		$wordsCount = count($wordsAry);
+		
+		for($i=0;$i<$wordsCount;$i++) {
+			$highlighted_text = "<span style='font-weight:bold;'>$wordsAry[$i]</span>";
+			$text = str_ireplace($wordsAry[$i], $highlighted_text, $text);
+		}
 
-    
+		return $text;
+	}
     
     
     
@@ -335,10 +345,10 @@
 										
 										
 										
-											//$_SESSION['db_search_result' . $sender_id . '_' . $message_forum_id . urlencode($our_search)] = true;
+										//$_SESSION['db_search_result' . $sender_id . '_' . $message_forum_id . urlencode($our_search)] = true;
 										
-											$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
-										}
+										$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+										
 									}
 								
 								}
