@@ -269,20 +269,21 @@
 							
 								error_log("returned from query:" . json_encode($new_messages));
 							
-								if($new_message = odbc_db_fetch_array($mydb, $new_messages)) {
+								$new_message = odbc_db_fetch_array($mydb, $new_messages);
+								if($new_message[0]) {
 									
 									error_log("Got one row: " . json_encode($new_message));
 									
-									error_log("Result about to message: " . $new_message->result);
+									error_log("Result about to message: " . $new_message[0]);
 									
-									$new_message_id = $api->new_message($helper, $new_message->result, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+									$new_message_id = $api->new_message($helper, $new_message[0], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 									
 									$cnt = 1;
 									
 									//Do any further results
 									while($new_message = odbc_db_fetch_array($new_messages)) {
 										if($cnt < $db_searcher_config['maxDisplayMessages']) {
-											$new_message_id = $api->new_message($helper, $new_message->result, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+											$new_message_id = $api->new_message($helper, $new_message[0], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 											
 										} 
 										$cnt++;
