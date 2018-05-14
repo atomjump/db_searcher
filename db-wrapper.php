@@ -11,7 +11,12 @@ function odbc_db_connect($json) {
 		odbc_autocommit($dbh, true);
 		return $dbh;
 	} else {
-		$dbh = dbconnect($json['host'], $json['username'], $json['password'], $json['dbname']);	//Use the parent method
+		$dbh = dbconnect($json['host'], $json['username'], $json['password']);	//Use the parent method
+		
+		dbselect($json['dbname']);
+	  	db_set_charset('utf8');
+	  	db_misc();
+		
 		return $dbh;
 	}
 }
