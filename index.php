@@ -95,11 +95,12 @@
     
     function run_query($sql, $json, $no_results_msg = null) 
     {
-    
+    	error_log("Trying to connect to database: " . json_encode($json));
+    	
 		if(odbc_db_code_checks($json)) {
 
 			try {
-				error_log("Trying to connect to database: " . json_encode($json));
+				
 				$dbh = odbc_db_connect($json);
 				if(!$dbh) {
 					$errmsg = odbc_db_err_msg($json);
