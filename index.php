@@ -77,7 +77,9 @@
 					}
 					
 					
-					if(!$result->num_rows) {
+					error_log("Number of rows: " . $result->num_rows);
+					
+					if(!$result->num_rows || is_null($result->num_rows)) {
 						
 					
 						$msg = "Sorry, there were no results";
