@@ -95,7 +95,7 @@
     
     function run_query($sql, $json, $no_results_msg = null) 
     {
-    	error_log("Trying to connect to database: " . json_encode($json));
+    	error_log("Trying to connect to database: " . $json);
     	
 		if(odbc_db_code_checks($json)) {
 
@@ -290,7 +290,7 @@
                         	$db = array();
                         	foreach($db_searcher_config['databases'] as $database) {
                         		if($database['dbId'] == $db_id) {
-                        			$db = $db_id;
+                        			$db = $database['dbId'];
                         		}
                         	}
                         	
