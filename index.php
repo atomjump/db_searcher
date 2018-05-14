@@ -44,7 +44,7 @@
     
     
     //TESTING code 
-    
+    /*
     if(!isset($db_searcher_config)) {
 		//Get global plugin config - but only once
 		global $cnf;
@@ -86,7 +86,7 @@
 		echo "Posting new message: " . $new_message . "\n";
 	
 	
-	 }       
+	 }  */     
     
     //--- END OF TESTING
     
