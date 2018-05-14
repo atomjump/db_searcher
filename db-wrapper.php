@@ -3,6 +3,8 @@
 //ODBC Database wrapper
 
 function odbc_db_connect($json) {
+	global $db;	
+	
 	if($json['useODBC'] == true) {
 		$dbh = odbc_connect($json['dsnHere'],$json['username'], $json['password']);
 		
@@ -15,17 +17,21 @@ function odbc_db_connect($json) {
 		//MySQL
 		
 		dbclose();		//close off the current db
-		global $db;
 		
-		$db = dbconnect($json['host'], $json['username'], $json['password']);	//Use the parent method
+		$dbcheck = dbconnect($json['host'], $json['username'], $json['password']);	//Use the parent method
 		
-		dbselect($json['dbname']);
-	  	db_set_charset('utf8');
-	  	if($json['innodb'] == true) {
-	  		db_misc();
-	  	}
+		if($dbcheck) {
+			$db = $dbcheck;
+			dbselect($json['dbname']);
+			db_set_charset('utf8');
+			if($json['innodb'] == true) {
+				db_misc();
+			}
 		
-		return $db;
+			return $db;
+		} else {
+			return false;
+		}
 	}
 }
 

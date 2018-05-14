@@ -76,7 +76,7 @@
 						error_log("Error: " . $errmsg);
 					}
 					
-					if (!$result){
+					if ((!$result) ||(isset($result['num_rows']) && is_null($result['num_rows']))){
 						
 					
 						$msg = "Sorry, there were no results";
