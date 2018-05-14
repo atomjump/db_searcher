@@ -13,6 +13,7 @@
     	// "details on [SEARCH]"
     	//And replies with the value of [SEARCH], in this case 'test'
     	//Note: 'details on' is a case insensitive search
+    	
     	$message = trim($message);
     
     	foreach($user_queries as $query) {
@@ -25,7 +26,11 @@
     		print_r($matches);
     		
     		if($matches[1]) {
-    			return $matches[1];
+    		
+    			//$ret = preg_replace('~[\r\n]+~', '', trim($matches[1]));
+    			$ret = str_replace("\\r", '', $matches[1]);
+    			$ret = str_replace("\\n", '', $ret);
+    			return $ret;
     		} else {
     			return false;
     		}
@@ -37,7 +42,7 @@
     
     
     //TESTING code 
-    
+    /*
     if(!isset($db_searcher_config)) {
 		//Get global plugin config - but only once
 		global $cnf;
@@ -61,7 +66,7 @@
             
     $user_queries = $db_searcher_config['forums'][0]['userQueries'];
     print_r($user_queries);
-    $our_search = parse_message("Aha: Detail this ahoy\r\n", $user_queries);
+    $our_search = parse_message("Me: detail yes\\r\\n", $user_queries);
     echo "Result: " . $our_search . "\n";
     
     
@@ -80,7 +85,7 @@
 	
 	
 	 }       
-    
+    */
     //--- END OF TESTING
     
     
