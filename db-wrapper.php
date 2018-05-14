@@ -62,6 +62,21 @@ function odbc_db_fetch_array($json, $result) {
 
 }
 
+function odbc_dbclose($json) {
+
+	if($json['useODBC'] == true) {
+		
+		odbc_close();
+		return;
+	
+	} else {
+		
+		dbclose();
+		return;
+	}
+
+}
+
 
 function odbc_db_get_field($json, $result, $field, $multi_results_false = false) {
 	//Get a field from a single database result row. ASsume this is a single row returned.

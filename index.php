@@ -309,18 +309,20 @@
 								error_log("Message has been queued successfully.");
 								
 								//Now send the messages. Switch back to the main database.
-								unset($db);			//Clear off our current database connection again, to allow a reconnect
+								odbc_dbclose();			//Clear off our current database connection again, to allow a reconnect
 								make_writable_db();
 								
 								error_log("db is now:" . json_encode($db));
 								
-								foreach($all_messages as $this_message) {
-									error_log("Result about to message: " . $this_message);
-									$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
-								}
+								if($db) {
+									foreach($all_messages as $this_message) {
+										error_log("Result about to message: " . $this_message);
+										$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+									}
 								
-								error_log("About to complete parallel calls");
-								$api->complete_parallel_calls();
+									error_log("About to complete parallel calls");
+									$api->complete_parallel_calls();
+								}
 															
 								 
 							  }
