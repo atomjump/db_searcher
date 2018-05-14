@@ -280,12 +280,12 @@
                     }	//End of if send
                 }
             } 
-
+			}
             return true;
 
         }
-    }
     
+    }
 
     
 ?>
