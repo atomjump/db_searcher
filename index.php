@@ -238,16 +238,16 @@
             }
             
             
-            
-            
-           
+         
             
             if($sender_email == $helper_email) {
                 //Don't react to this message
+                
+                error_log("Sender email is same as helper email");
             } else {
                 if($helper_email != "") {
                 
-                     
+                     error_log("Send = " . $send);
             
                     //React to this message, it was from another user
                     if($send == true) {
@@ -256,8 +256,14 @@
                        
                         $options = array('notification' => false);		//turn off any notifications from these messages
                         
+                        
+                        
+                        
                         //Find the user queries of this
                         $our_search = parse_message($message, $user_queries);
+                        
+                        error_log("Our search:" . print_r($our_search));
+                        
                         
                         if($our_search !== false) {
                         	//Yes, we were a matching request - run a query against the database and respond 
@@ -265,6 +271,9 @@
                         	//Replace the string [SEARCH] in the SQL, with our actual search term
                         	$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
                         	$new_messages = run_query($final_sql, $db_searcher_config['databases'][$db_id], $no_result);
+                        	
+                        	error_log("New messages:" . print_r($new_messages));
+                        	
                         	if(isset($new_messages[0])) {
                         		$cnt = 0;
                         		foreach($new_messages as $new_message) {
@@ -277,12 +286,15 @@
                        				}
                        				$cnt++;
                        			}
-                        
-                       	 }                        
-                    }	//End of if send
-                }
+                        	 }
+                       	 }   //End of our search                     
+                    	
+                    }     //End of if send
+                }		//End of helper email
             } 
-			}
+            
+            
+            
             return true;
 
         }
