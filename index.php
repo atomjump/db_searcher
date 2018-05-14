@@ -345,17 +345,15 @@
 															
 								 
 							  }
-                       	 }   //End of our search                     
+                       	 }   //End of if send                   
                     	
-                    }     //End of if send
-                }		//End of helper email
-            } 
+                }     //End of helper
+            	
+             }     //end of helper_email not blank   
+                
+			return true;
+		} 	// End of on_message
             
-            
-            
-            return true;
-
-        } //End of on_message
     
     }	//End of class
 
