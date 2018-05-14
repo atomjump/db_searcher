@@ -233,7 +233,7 @@
                         //Get the forum id
                                           
                        
-                        $options = array('notification' => false);		//turn off any notifications from these messages
+                        $options = array('notification' => false, 'allow_plugins' => false);		//turn off any notifications from these messages
                         
                         error_log("message:" . $message);
                         error_log("user_queries[0]:" .  $user_queries[0]);
