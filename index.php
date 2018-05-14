@@ -17,7 +17,7 @@
     	foreach($user_queries as $query) {
     		//Remove the [SEARCH], to allow for a matcher
     		$preg_query = str_replace("[SEARCH]", "(.*)", $query);
-    		$preg_query = '/\:' . $preg_query . '/i';
+    		$preg_query = '/\:\s' . $preg_query . '/i';
     		echo "Preg query:" . $preg_query .  "  Running against: " . $message . "\n";
     		preg_match($preg_query, $message, $matches);
     		
@@ -108,7 +108,7 @@
 						if(isset($no_results_msg)) {
 							$msg = $no_results_msg;
 						}	
-						return $msg;
+						return array('result' => $msg);
 					} else {
 	
 						//Success!
