@@ -291,7 +291,7 @@
                         	$mydb = array();
                         	foreach($db_searcher_config['databases'] as $database) {
                         		if($database['dbId'] == $db_id) {
-                        			$db = $database;
+                        			$mydb = $database;
                         			error_log("Database name selected:" . $database['dbname']);
                         		}
                         	}
