@@ -256,11 +256,11 @@
                        
                         $options = array('notification' => false);		//turn off any notifications from these messages
                         
-                        
-                        
+                        error_log("message:" . $message);
+                        error_log("user_queries[0]:" .  $user_queries[0]);
                         
                         //Find the user queries of this
-                        $our_search = parse_message($message, $user_queries);
+                        $our_search = parse_message($message,);
                         
                         error_log("Our search:" . $our_search);
                         
