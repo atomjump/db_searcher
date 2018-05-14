@@ -289,7 +289,7 @@
 									$cnt = 1;
 									
 									//Do any further results
-									while($new_message = odbc_db_fetch_array($new_messages)) {
+									while($new_message = odbc_db_fetch_array($mydb, $new_messages)) {
 										if($cnt < $db_searcher_config['maxDisplayMessages']) {
 											error_log("Result about to message: " . $new_message[0]);
 											$all_messages[] = $new_message[0];						
