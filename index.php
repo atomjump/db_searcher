@@ -304,6 +304,7 @@
 							
 								error_log("returned from query:" . json_encode($new_messages));
 							
+								//TODO: this should handle odbc also 
 								if($new_message = db_fetch_array($new_messages)) {
 									
 									$new_message_id = $api->new_message($helper, $new_message['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);

@@ -11,6 +11,10 @@ function odbc_db_connect($json) {
 		odbc_autocommit($dbh, true);
 		return $dbh;
 	} else {
+	
+		//MySQL
+		
+		dbclose();		//close off the current db
 		$dbh = dbconnect($json['host'], $json['username'], $json['password']);	//Use the parent method
 		
 		dbselect($json['dbname']);
@@ -61,7 +65,7 @@ function odbc_db_get_field($json, $result, $field, $multi_results_false = false)
 			return false;
 		}
 	} else {
-		$row = sqlsrv_fetch_array($result);
+		$row = db_fetch_array($result);
 		if($row) {
 			
 			//OK, there is at least one result, prepare to return this
@@ -69,7 +73,7 @@ function odbc_db_get_field($json, $result, $field, $multi_results_false = false)
 			
 			//Now check if there is more than one result
 			if($multi_results_false == true) {
-				if(sqlsrv_fetch_array($result)) {
+				if(db_fetch_array($result)) {
 					//Yes, there is more than one result
 					return "DUPLICATE";
 				}
