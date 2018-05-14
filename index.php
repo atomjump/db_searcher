@@ -25,7 +25,6 @@
     		error_log("Preg query:" . $preg_query .  "  Running against: " . $message . "\n");
     		preg_match($preg_query, $message, $matches);
     		
-    		print_r($matches);
     		
     		if($matches[1]) {
     		
@@ -68,7 +67,6 @@
 					$sql = str_replace("\\","", $sql);
 					error_log("Running SQL:" . $sql . " connecting to dbh:" . json_encode($json));
 					
-					echo "\nQuery:  " . $sql;
 					$result = odbc_db_query($json, $dbh, $sql);
 					
 					$errmsg = odbc_db_err_msg($json);
@@ -217,6 +215,7 @@
             }
             
             
+            
          
             
             if($sender_email == $helper_email) {
@@ -241,7 +240,13 @@
                         //Find the user queries of this
                         $our_search = parse_message($message, $user_queries);
                         
+                        
+                        
+                        
+                        
                         error_log("Our search:" . $our_search);
+                        
+                        
                         
                         
                         if($our_search !== false) {
@@ -327,7 +332,13 @@
 								if($db) {
 									foreach($all_messages as $this_message) {
 										error_log("Result about to message: " . $this_message);
-										$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+										
+										
+										
+											//$_SESSION['db_search_result' . $sender_id . '_' . $message_forum_id . urlencode($our_search)] = true;
+										
+											$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+										}
 									}
 								
 								}
