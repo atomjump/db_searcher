@@ -273,14 +273,16 @@
 									
 									error_log("Got one row: " . json_encode($new_message));
 									
-									$new_message_id = $api->new_message($helper, $new_message['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+									error_log("Result about to message: " . $new_message->result);
+									
+									$new_message_id = $api->new_message($helper, $new_message->result, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 									
 									$cnt = 1;
 									
 									//Do any further results
-									while($new_message = db_fetch_array($new_messages)) {
+									while($new_message = odbc_db_fetch_array($new_messages)) {
 										if($cnt < $db_searcher_config['maxDisplayMessages']) {
-											$new_message_id = $api->new_message($helper, $new_message['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+											$new_message_id = $api->new_message($helper, $new_message->result, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 											
 										} 
 										$cnt++;
