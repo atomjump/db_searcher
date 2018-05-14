@@ -335,7 +335,7 @@
 									foreach($all_messages as $this_message) {
 										if($verbose) error_log("Result about to message: " . $this_message);
 										
-										//$this_message = highlight_keywords($this_message, $our_search);
+										$this_message = highlight_keywords($this_message, $our_search);
 										
 										//Send the message
 										$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
