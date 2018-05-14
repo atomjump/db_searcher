@@ -70,7 +70,15 @@
 					
 					echo "\nQuery:  " . $sql;
 					$result = odbc_db_query($json, $dbh, $sql);
+					
+					$errmsg = odbc_db_err_msg($json);
+					if($errmsg) {
+						error_log("Error: " . $errmsg);
+					}
+					
 					if (!$result){
+						
+					
 						$msg = "Sorry, there were no results";
 						if(isset($no_results_msg)) {
 							$msg = $no_results_msg;
