@@ -2,7 +2,6 @@
     include_once("classes/cls.pluginapi.php");
     include_once(dirname(__FILE__) . "/db-wrapper.php");
     
-
     
     function parse_message($message, $user_queries)
     {
@@ -22,13 +21,10 @@
     		//Remove the [SEARCH], to allow for a matcher
     		$preg_query = str_replace("[SEARCH]", "(.*)", $query);
     		$preg_query = '/\:\s' . $preg_query . '/i';
-    		error_log("Preg query:" . $preg_query .  "  Running against: " . $message . "\n");
     		preg_match($preg_query, $message, $matches);
     		
     		
     		if($matches[1]) {
-    		
-    			
     			$ret = str_replace("\\r", '', $matches[1]);
     			$ret = str_replace("\\n", '', $ret);
     			return $ret;
@@ -58,7 +54,6 @@
     
     function run_query($sql, $json, $no_results_msg = null) 
     {
-    	error_log("Trying to connect to database: " . $json['dbname']);
     	
 		if(odbc_db_code_checks($json)) {
 
@@ -75,7 +70,6 @@
 					//Try running the query
 					$sql = clean_data($sql); //E.g. "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1";
 					$sql = str_replace("\\","", $sql);
-					error_log("Running SQL:" . $sql . " connecting to dbh:" . json_encode($json));
 					
 					$result = odbc_db_query($json, $dbh, $sql);
 					
@@ -83,10 +77,7 @@
 					if($errmsg) {
 						error_log("Error: " . $errmsg);
 					}
-					
-					
-					error_log("Number of rows: " . $result->num_rows);
-					
+										
 					if(!$result->num_rows || is_null($result->num_rows)) {
 						
 					
@@ -120,6 +111,10 @@
     {
         public function on_message($message_forum_id, $message, $message_id, $sender_id, $recipient_id, $sender_name, $sender_email, $sender_phone)
         {
+        
+       		$verbose = false;
+
+        
                       
         	if(!isset($db_searcher_config)) {
                 //Get global plugin config - but only once
@@ -143,7 +138,7 @@
             }
             
             
-            error_log("Read .json");
+            if($verbose) error_log("Read .json");
             
             $api = new cls_plugin_api();
             
@@ -198,8 +193,7 @@
             if($write_back == true) {
                 //OK save back the config with the new forum ids in it - this is for speed. 
                 $data = json_encode($db_searcher_config, JSON_PRETTY_PRINT); //note this pretty print requires PHP ver 5.4
-                file_put_contents($path, $data); 
-            
+                file_put_contents($path, $data);      
             }
             
             if($db_searcher_config['storeInDb'] == true) {
@@ -230,12 +224,11 @@
             
             if($sender_email == $helper_email) {
                 //Don't react to this message
-                
                 error_log("Sender email is same as helper email");
             } else {
                 if($helper_email != "") {
                 
-                     error_log("Send = " . $send);
+                     if($verbose) error_log("Send = " . $send);
             
                     //React to this message, it was from another user
                     if($send == true) {
@@ -244,8 +237,8 @@
                        
                         $options = array('notification' => false, 'allow_plugins' => false);		//turn off any notifications from these messages
                         
-                        error_log("message:" . $message);
-                        error_log("user_queries[0]:" .  $user_queries[0]);
+                        if($verbose) error_log("message:" . $message);
+                        if($verbose) error_log("user_queries[0]:" .  $user_queries[0]);
                         
                         //Find the user queries of this
                         $our_search = parse_message($message, $user_queries);
@@ -254,7 +247,7 @@
                         
                         
                         
-                        error_log("Our search:" . $our_search);
+                        if($verbose) error_log("Our search:" . $our_search);
                         
                         
                         
@@ -265,14 +258,14 @@
                         	//Replace the string [SEARCH] in the SQL, with our actual search term
                         	$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
                         	
-                        	error_log("Final sql:" . $final_sql);
-                        	error_log("DB id:" . $db_id);
+                        	if($verbose) error_log("Final sql:" . $final_sql);
+                        	if($verbose) error_log("DB id:" . $db_id);
                         	
                         	$mydb = array();
                         	foreach($db_searcher_config['databases'] as $database) {
                         		if($database['dbId'] == $db_id) {
                         			$mydb = $database;
-                        			error_log("Database name selected:" . $database['dbname']);
+                        			if($verbose) error_log("Database name selected:" . $database['dbname']);
                         		}
                         	}
                         	
@@ -286,27 +279,26 @@
 								//Run the db query
 								$new_messages = run_query($final_sql, $mydb, $no_result);
 							
-								error_log("returned from query:" . json_encode($new_messages));
+								if($verbose) error_log("returned from query:" . json_encode($new_messages));
 							
 								$new_message = odbc_db_fetch_array($mydb, $new_messages);
 								if($new_message[0] && $new_message[0] != "") {
 									
-									error_log("Got one row: " . json_encode($new_message));
-									
-									error_log("Result about to message: " . $new_message[0]);
+									if($verbose) error_log("Got one row: " . json_encode($new_message));
+									if($verbose) error_log("Result prepping to message: " . $new_message[0]);
 									
 									
 									$all_messages[] = $new_message[0];
 								
 									
-									error_log("Finished sending 1st message");
+									if($verbose) error_log("Finished sending 1st message");
 									
 									$cnt = 1;
 									
 									//Do any further results
 									while($new_message = odbc_db_fetch_array($mydb, $new_messages)) {
 										if($cnt < $db_searcher_config['maxDisplayMessages']) {
-											error_log("Result about to message: " . $new_message[0]);
+											if($verbose) error_log("Result prepping to message: " . $new_message[0]);
 											$all_messages[] = $new_message[0];						
 											
 										} else {
@@ -321,7 +313,7 @@
 									$all_messages[] = $no_result;
 								}
 							
-								error_log("Message has been queued successfully.");
+								if($verbose) error_log("Message has been queued successfully.");
 								
 								//Now send the messages. Switch back to the main database.
 								odbc_dbclose();			//Clear off our current database connection again, to allow a reconnect
@@ -337,17 +329,15 @@
 								db_set_charset('utf8');
 								db_misc();
 								
-								error_log("db is now:" . json_encode($db));
+								if($verbose) error_log("db is now:" . json_encode($db));
 								
 								if($db) {
 									foreach($all_messages as $this_message) {
-										error_log("Result about to message: " . $this_message);
+										if($verbose) error_log("Result about to message: " . $this_message);
 										
 										$this_message = highlight_keywords($this_message, $our_search);
 										
-										
-										//$_SESSION['db_search_result' . $sender_id . '_' . $message_forum_id . urlencode($our_search)] = true;
-										
+										//Send the message
 										$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 										
 									}
@@ -355,7 +345,7 @@
 								}
 															
 								 
-							  }
+							  }		//End of if mydb
                        	 }   //End of our search
                     }  //End of our send                  
                     	
