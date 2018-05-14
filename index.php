@@ -272,7 +272,7 @@
                         error_log("user_queries[0]:" .  $user_queries[0]);
                         
                         //Find the user queries of this
-                        $our_search = parse_message($message);
+                        $our_search = parse_message($message, $user_queries);
                         
                         error_log("Our search:" . $our_search);
                         
@@ -286,8 +286,14 @@
                         	error_log("Final sql:" . $final_sql);
                         	error_log("DB id:" . $db_id);
                         	
+                        	$db = array();
+                        	foreach($db_searcher_config['databases'] as $database) {
+                        		if($database['dbId'] == $db_id) {
+                        			$db = $db_id;
+                        		}
+                        	}
                         	
-                        	$new_messages = run_query($final_sql, $db_searcher_config['databases'][$db_id], $no_result);
+                        	$new_messages = run_query($final_sql, $db, $no_result);
                         	
                         	//revert back to our own database 
                         	make_writable_db();
