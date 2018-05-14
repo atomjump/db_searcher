@@ -14,7 +14,7 @@ function odbc_db_connect($json) {
 	
 		//MySQL
 		
-		dbclose();		//close off the current db
+		//dbclose();		//close off the current db
 		$dbh = dbconnect($json['host'], $json['username'], $json['password']);	//Use the parent method
 		
 		dbselect($json['dbname']);
@@ -35,7 +35,7 @@ function odbc_db_query($json, $dbh, $sql) {
 	} else {
 		
 		error_log("Running dbquery() on " . $sql);
-		return dbquery($sql);
+		return mysqli_query($dbh, $sql);
 	}
 }
 
