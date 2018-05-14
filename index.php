@@ -271,6 +271,8 @@
 							
 								if($new_message = odbc_db_fetch_array($mydb, $new_messages)) {
 									
+									error_log("Got one row: " . json_encode($new_message));
+									
 									$new_message_id = $api->new_message($helper, $new_message['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 									
 									$cnt = 1;
