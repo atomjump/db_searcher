@@ -76,15 +76,16 @@
 						error_log("Error: " . $errmsg);
 					}
 					
-					if ((!$result) ||(isset($result['num_rows']) && is_null($result['num_rows']))){
+					
+					if(!$result->num_rows) {
 						
 					
 						$msg = "Sorry, there were no results";
 						if(isset($no_results_msg)) {
 							$msg = $no_results_msg;
 						}	
-						$result = array( 0 => array('result' => $msg));
-						return $result;
+						$retresult = array( 0 => array('result' => $msg));
+						return $retresult;
 					} else {
 						
 						//Success!
