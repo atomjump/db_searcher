@@ -111,6 +111,7 @@
 	
 					//Try running the query
 					$sql = clean_data($sql); //E.g. "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1";
+					$sql = str_replace("\\","", $sql);
 					error_log("Running SQL:" . $sql);
 					
 					echo "\nQuery:  " . $sql;
