@@ -58,7 +58,7 @@
 				if(!$dbh) {
 					$errmsg = odbc_db_err_msg($json);
 		
-					return array( 0 => array('result' => "Sorry, I could not connect to the database. Please check your username, password, database file and host parameters."));
+					return array( 0 => array(0 => "Sorry, I could not connect to the database. Please check your username, password, database file and host parameters."));
 					
 				} else {
 	
@@ -93,11 +93,11 @@
 					}
 				}
 			} catch (Exception $e) {
-				return array( 0 => array('result' => "Sorry, your installation is incomplete, and cannot use the database connection software."));
+				return array( 0 => array(0 => "Sorry, your installation is incomplete, and cannot use the database connection software."));
 
 			}
 		} else {
-			return array( 0 => array('result' => "Sorry, your installation is not working, and cannot connect to your database. Are you sure your database is installed on this machine?"));	
+			return array( 0 => array(0 => "Sorry, your installation is not working, and cannot connect to your database. Are you sure your database is installed on this machine?"));	
 		}
 	}
     
@@ -279,7 +279,7 @@
 								error_log("returned from query:" . json_encode($new_messages));
 							
 								$new_message = odbc_db_fetch_array($mydb, $new_messages);
-								if($new_message[0]) {
+								if($new_message[0] && $new_message[0] != "") {
 									
 									error_log("Got one row: " . json_encode($new_message));
 									
@@ -308,7 +308,7 @@
 									
 								} else {
 									//Do a no result or error message
-									$all_messages[] = $new_message[0];
+									$all_messages[] = $no_result;
 								}
 							
 								error_log("Message has been queued successfully.");
