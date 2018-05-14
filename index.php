@@ -42,53 +42,7 @@
     
     }
     
-    
-    //TESTING code 
-    /*
-    if(!isset($db_searcher_config)) {
-		//Get global plugin config - but only once
-		global $cnf;
-		
-		$path = dirname(__FILE__) . "/config/config.json";
-		
-		
-		$data = file_get_contents($path);
-		
-		if($data) {
-			$db_searcher_config = json_decode($data, true);
-			if(!isset($db_searcher_config)) {
-				echo "Error: db_searcher config/config.json is not valid JSON.";
-				exit(0);
-			}
-		} else {
-			echo "Error: Missing config/config.json in db_searcher plugin.";
-			exit(0);
-		}
-	}
-            
-    $user_queries = $db_searcher_config['forums'][0]['userQueries'];
-    print_r($user_queries);
-    $our_search = parse_message("Me: detail yes\\r\\n", $user_queries);
-    echo "Result: " . $our_search . "\n";
-    
-    
-    if($our_search !== false) {
-		//Yes, we were a matching request - run a query against the database and respond 
-		
-		//Replace the string [SEARCH] in the SQL, with our actual search term
-		$sql_query = "SELECT CONCAT('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1";		//TESTING
-		
-		$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
-		echo "Final sql = " . $final_sql . "\n";
-		
-		$new_message = run_query($final_sql, $db_searcher_config['databases'][$db_id]);
-		
-		echo "Posting new message: " . $new_message . "\n";
-	
-	
-	 }  */     
-    
-    //--- END OF TESTING
+
     
     
     
@@ -304,8 +258,7 @@
 							
 								error_log("returned from query:" . json_encode($new_messages));
 							
-								//TODO: this should handle odbc also 
-								if($new_message = db_fetch_array($new_messages)) {
+								if($new_message = odbc_db_fetch_array($mydb, $new_messages)) {
 									
 									$new_message_id = $api->new_message($helper, $new_message['result'], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
 									

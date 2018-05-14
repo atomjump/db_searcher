@@ -14,8 +14,10 @@ function odbc_db_connect($json) {
 	
 		//MySQL
 		
-		//dbclose();		//close off the current db
-		$dbh = dbconnect($json['host'], $json['username'], $json['password']);	//Use the parent method
+		dbclose();		//close off the current db
+		global $db;
+		
+		$db = dbconnect($json['host'], $json['username'], $json['password']);	//Use the parent method
 		
 		dbselect($json['dbname']);
 	  	db_set_charset('utf8');
@@ -23,7 +25,7 @@ function odbc_db_connect($json) {
 	  		db_misc();
 	  	}
 		
-		return $dbh;
+		return $db;
 	}
 }
 
@@ -37,6 +39,21 @@ function odbc_db_query($json, $dbh, $sql) {
 		error_log("Running dbquery() on " . $sql);
 		return mysqli_query($dbh, $sql);
 	}
+}
+
+
+function odbc_db_fetch_array($json, $result) {
+	if($json['useODBC'] == true) {
+		
+		$row = odbc_fetch_row($result)) {
+		return $row;
+	
+	} else {
+		
+		$row = db_fetch_array($result);
+		return $row;
+	}
+
 }
 
 
