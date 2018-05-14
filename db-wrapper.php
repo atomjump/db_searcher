@@ -45,7 +45,7 @@ function odbc_db_query($json, $dbh, $sql) {
 function odbc_db_fetch_array($json, $result) {
 	if($json['useODBC'] == true) {
 		
-		$row = odbc_fetch_row($result)) {
+		$row = odbc_fetch_row($result);
 		return $row;
 	
 	} else {
