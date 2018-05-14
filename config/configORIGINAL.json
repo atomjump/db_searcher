@@ -58,7 +58,8 @@
             "helperName": "Any helper name for this forum",
             "helperEmail": "This email must be set, and must not be anyone else's email."
         }
-    ]
+    ],
+    "storeInDb": false
 
 
 }

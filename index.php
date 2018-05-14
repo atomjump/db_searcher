@@ -156,6 +156,8 @@
             }
             
             
+            error_log("Read .json");
+            
             $api = new cls_plugin_api();
             
             //Loop through each of the forums
