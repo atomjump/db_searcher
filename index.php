@@ -260,7 +260,7 @@
                         error_log("user_queries[0]:" .  $user_queries[0]);
                         
                         //Find the user queries of this
-                        $our_search = parse_message($message,);
+                        $our_search = parse_message($message);
                         
                         error_log("Our search:" . $our_search);
                         
