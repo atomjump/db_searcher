@@ -264,6 +264,10 @@
                         	if($mydb) {
 								$sender_ip = $api->get_current_user_ip();
 								
+								//Prep all the messages to send
+								$all_messages = array();
+								
+								
 								//Run the db query
 								$new_messages = run_query($final_sql, $mydb, $no_result);
 							
@@ -276,7 +280,9 @@
 									
 									error_log("Result about to message: " . $new_message[0]);
 									
-									$new_message_id = $api->new_message($helper, $new_message[0], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+									
+									$all_messages[] = $new_message[0];
+								
 									
 									error_log("Finished sending 1st message");
 									
@@ -286,8 +292,7 @@
 									while($new_message = odbc_db_fetch_array($new_messages)) {
 										if($cnt < $db_searcher_config['maxDisplayMessages']) {
 											error_log("Result about to message: " . $new_message[0]);
-									
-											$new_message_id = $api->new_message($helper, $new_message[0], $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+											$all_messages[] = $new_message[0];						
 											
 										} else {
 											break;
@@ -303,19 +308,15 @@
 							
 								error_log("Message has been queued successfully.");
 								
-								 //revert back to our own database 
-								 make_writable_db();
+								//Now send the messages. Switch back to the main database.
+								make_writable_db();
+								
+								foreach($all_messages as $this_message) {
+									$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+								}
 								
 								$api->complete_parallel_calls();
-							
-								  
-								  
-								
-										
-								
-								
-								 
-								
+															
 								 
 							  }
                        	 }   //End of our search                     
