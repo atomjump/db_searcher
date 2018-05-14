@@ -112,7 +112,7 @@
 					//Try running the query
 					$sql = clean_data($sql); //E.g. "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1";
 					$sql = str_replace("\\","", $sql);
-					error_log("Running SQL:" . $sql);
+					error_log("Running SQL:" . $sql . " connecting to dbh:" . json_encode($json));
 					
 					echo "\nQuery:  " . $sql;
 					$result = odbc_db_query($json, $dbh, $sql);
