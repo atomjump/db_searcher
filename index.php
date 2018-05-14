@@ -262,7 +262,7 @@
                         //Find the user queries of this
                         $our_search = parse_message($message, $user_queries);
                         
-                        error_log("Our search:" . print_r($our_search));
+                        error_log("Our search:" . $our_search);
                         
                         
                         if($our_search !== false) {
@@ -270,7 +270,15 @@
                         	
                         	//Replace the string [SEARCH] in the SQL, with our actual search term
                         	$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
+                        	
+                        	error_log("Final sql:" . $final_sql);
+                        	error_log("DB id:" . $db_id);
+                        	
+                        	
                         	$new_messages = run_query($final_sql, $db_searcher_config['databases'][$db_id], $no_result);
+                        	
+                        	//revert back to our own database 
+                        	make_writable_db();
                         	
                         	error_log("New messages:" . print_r($new_messages));
                         	
