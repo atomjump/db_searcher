@@ -15,7 +15,9 @@ function odbc_db_connect($json) {
 		
 		dbselect($json['dbname']);
 	  	db_set_charset('utf8');
-	  	db_misc();
+	  	if($json['innodb'] == true) {
+	  		db_misc();
+	  	}
 		
 		return $dbh;
 	}
@@ -27,6 +29,7 @@ function odbc_db_query($json, $dbh, $sql) {
 		
 		return odbc_exec($dbh, $sql);
 	} else {
+		
 		error_log("Running dbquery() on " . $sql);
 		return dbquery($sql);
 	}

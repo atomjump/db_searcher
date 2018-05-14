@@ -11,6 +11,7 @@
     		"username": "databasename",
     		"password": "password",
     		"host": "host",
+    		"innodb": false,
     		"useODBC": true
     	}    
     ],
