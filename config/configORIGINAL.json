@@ -29,7 +29,7 @@
             ],
             "sqlQuery": "SELECT CONCAT('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
             "noResult": "Sorry, there were no results.",
-            "helperName": "Your company",
+            "helperName": "Found",
             "helperEmail": "yourname@yourcompany.com"
         }, 
         {
@@ -45,7 +45,7 @@
             ],
             "sqlQuery": "SELECT CONCAT('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
             "noResult": "Sorry, there were no results.",
-            "helperName": "Your company",
+            "helperName": "Found",
             "helperEmail": "yourname@yourcompany.com"
         }, 
         {
