@@ -1,3 +1,5 @@
+<img src="https://atomjump.com/images/logo80.png">
+
 # db_searcher
 Searches your database when you enter 'details [query]' into an AtomJump Messaging window
 
@@ -21,7 +23,7 @@ CREATE FULLTEXT INDEX searcher ON tbl_ssshout(var_shouted);
 CREATE INDEX ispublic ON tbl_ssshout(int_whisper_to_id);
 ```
 
-Then include the following SQL to provide a free text search in your config.json 'sqlQuery' field::
+Then include the following SQL to provide a free text search in your config.json 'sqlQuery' field:
 ```
 SELECT var_shouted FROM tbl_ssshout WHERE MATCH(var_shouted) AGAINST('[SEARCH]' IN BOOLEAN MODE) AND int_whisper_to_id IS NULL LIMIT 10
 ```
