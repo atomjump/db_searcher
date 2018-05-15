@@ -9,7 +9,7 @@ Note: this release should still be considered an Alpha.
 
 **Searching an AtomJump Messaging database**
 
-Note: you should be using MySQL ver >= 5.6, as FULLTEXT indexes are not supported on innodb tables.
+Note: you should be using MySQL ver >= 5.6, as FULLTEXT indexes are not supported on innodb tables. See the notes below for an alternative.
 
 You should set the config.json 'innodb' field to true.
 
@@ -18,7 +18,7 @@ Create the index first:
 ```
 USE ssshout;
 CREATE FULLTEXT INDEX searcher ON tbl_ssshout(var_shouted);
-CREATE INDEX public ON tbl_ssshout(int_whisper_to_id);
+CREATE INDEX ispublic ON tbl_ssshout(int_whisper_to_id);
 ```
 
 Then include the following SQL to provide a free text search in your config.json 'sqlQuery' field::
@@ -26,6 +26,10 @@ Then include the following SQL to provide a free text search in your config.json
 SELECT var_shouted FROM tbl_ssshout WHERE MATCH(var_shouted) AGAINST('[SEARCH]' IN BOOLEAN MODE) AND int_whisper_to_id IS NULL LIMIT 10
 ```
 
+For small sites, you can potentially use a MYISAM table, rather than an innodb table before creating the index. We cannot guarantee that will work in multiple server sites, however.
+```
+ALTER TABLE tbl_ssshout ENGINE = MYISAM;
+```
 
 
 **Searching a generic MySQL database**
