@@ -7,7 +7,7 @@ Note: this release should still be considered an Alpha.
 
 
 
-**Searching an AtomJump Messaging database**
+## Searching an AtomJump Messaging database
 
 Note: you should be using MySQL ver >= 5.6, as FULLTEXT indexes are not supported on innodb tables. See the notes below for an alternative.
 
@@ -32,7 +32,7 @@ ALTER TABLE tbl_ssshout ENGINE = MYISAM;
 ```
 
 
-**Searching a generic MySQL database**
+## Searching a generic MySQL database
 
 E.g. in your config.json 'sqlQuery' field:
 ```
@@ -40,7 +40,7 @@ SELECT CONCAT(var_name, ' ', var_description) AS result FROM tbl_bike WHERE var_
 ```
 
 
-**Searching a MySQL database with a free text field**
+## Searching a MySQL database with a free text field
 
 Create the index first:
 
@@ -61,7 +61,7 @@ Note: the COALESCE prevents NULL values from returning the whole record as NULL.
 
 
 
-**Searching a generic ODBC database**
+## Searching a generic ODBC database
 
 You will need to install the correct ODBC driver for your database, and create a DSN (whether this is on Windows or Unix).
 
