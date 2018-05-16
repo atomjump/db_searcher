@@ -158,27 +158,31 @@
             
             
             $write_back = false;
+            //Search through each of the different forum types (which have a different SQL query in each)
             for($cnt = 0; $cnt < count($db_searcher_config['forums']); $cnt++) {
             
                 if(isset($db_searcher_config['forums'][$cnt]['forum_id'])) {
+                	//We've already pre-saved this forum's id in the config file 
                     $forum_id = $db_searcher_config['forums'][$cnt]['forum_id'];
                 } else {
                     if($db_searcher_config['forums'][$cnt]['aj'] != 'default') {
+                    	//Get $forum_id from the name which is the forum that we are checking against
                         $forum_info = $api->get_forum_id($db_searcher_config['forums'][$cnt]['aj']);
                         $forum_id = $forum_info['forum_id'];                    
                         $db_searcher_config['forums'][$cnt]['forum_id'] = $forum_id;
                         $write_back = true;
                     } else {
+                    	//A special case 'default'
+                    	//So these queries will always be applied, no matter which forum (unless overriden by a special case). 
                         $forum_id = null;
                     }
                 }
                 
                 
                 if($message_forum_id == $forum_id) {
-                    //Yep this forum has a wait time specifically for it
+                    //Yes, this message is being posted onto the forum that we're checking against
                    
                     $user_queries = $db_searcher_config['forums'][$cnt]['userQueries'];
-                    $new_message = $db_searcher_config['forums'][$cnt]['message'];
                     $helper = $db_searcher_config['forums'][$cnt]['helperName'];
                     $helper_email = $db_searcher_config['forums'][$cnt]['helperEmail'];
                     $sql_queries = $db_searcher_config['forums'][$cnt]['sqlQueries'];
@@ -186,7 +190,11 @@
 					$no_result = $db_searcher_config['forums'][$cnt]['noResult'];
                     $send = true;
                 } else {
-                    if($db_searcher_config['forums'][$cnt]['aj'] == 'default') {
+                	//So it is not this special case, but if there is a default, and we have not
+                	//already set a special case, we can still 
+                	//use these queries
+                
+                    if(($db_searcher_config['forums'][$cnt]['aj'] == 'default')&&($send == false)) {
                         $user_queries = $db_searcher_config['forums'][$cnt]['userQueries'];
                         $helper = $db_searcher_config['forums'][$cnt]['helperName'];
                         $helper_email = $db_searcher_config['forums'][$cnt]['helperEmail'];
@@ -215,7 +223,6 @@
             			
             			//Get individual fields
             			$user_queries = $forum_config->userQueries;
-						$new_message = $forum_config->message;
 						$helper = $forum_config->helperName;
 						$helper_email = $forum_config->helperEmail;
 						$sql_queries = $forum_config->sqlQueries;
