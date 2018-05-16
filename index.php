@@ -219,8 +219,7 @@
             }
             
             
-            if($verbose == true) error_log("User queries: " . json_encode($user_queries));
-            
+             
             
          
             
