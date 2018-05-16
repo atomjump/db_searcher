@@ -120,7 +120,7 @@
         public function on_message($message_forum_id, $message, $message_id, $sender_id, $recipient_id, $sender_name, $sender_email, $sender_phone)
         {
         
-       		$verbose = true;		//TESTING in true state - this should be false
+       		$verbose = false;		//this should be false unless you want quite a few debug messages
 
         
                       
