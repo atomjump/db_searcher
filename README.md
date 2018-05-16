@@ -32,6 +32,16 @@ Then include the following SQL queries to provide a free text search in your con
 ]
 ```
 
+Or, if you want to include other fields, such as a time-stamp in the result, you can use
+```
+"sqlQueries": [
+	"DROP TABLE IF EXISTS best_options",
+	"CREATE TEMPORARY TABLE best_options SELECT var_shouted, int_whisper_to_id, date_when_shouted FROM tbl_ssshout WHERE MATCH(var_shouted) AGAINST('[SEARCH]' IN BOOLEAN MODE) LIMIT 200",
+	"SELECT CONCAT(var_shouted, ' [', date_when_shouted , ']') FROM best_options WHERE int_whisper_to_id IS NULL LIMIT 10"
+]
+```
+
+
 For small sites, you can potentially use a MYISAM table, rather than an innodb table before creating the index. We cannot guarantee that will work in multiple server sites, however.
 ```
 ALTER TABLE tbl_ssshout ENGINE = MYISAM;
