@@ -52,10 +52,10 @@
     
     
     
-    function run_query($sql, $json, $no_results_msg = null) 
+    function connect_to_db($json)
     {
-    	
-		if(odbc_db_code_checks($json)) {
+    
+    	if(odbc_db_code_checks($json)) {
 
 			try {
 				
@@ -66,32 +66,9 @@
 					return array( 0 => array(0 => "Sorry, I could not connect to the database. Please check your username, password, database file and host parameters."));
 					
 				} else {
-	
-					//Try running the query
-					$sql = clean_data($sql); //E.g. "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1";
-					$sql = str_replace("\\","", $sql);
+					//Connected OK!
+					return true;
 					
-					$result = odbc_db_query($json, $dbh, $sql);
-					
-					$errmsg = odbc_db_err_msg($json);
-					if($errmsg) {
-						error_log("Error: " . $errmsg);
-					}
-										
-					if(!$result->num_rows || is_null($result->num_rows)) {
-						
-					
-						$msg = "Sorry, there were no results";
-						if(isset($no_results_msg)) {
-							$msg = $no_results_msg;
-						}	
-						$retresult = array( 0 => array('result' => $msg));
-						return $retresult;
-					} else {
-						
-						//Success!
-						return $result;
-					}
 				}
 			} catch (Exception $e) {
 				return array( 0 => array(0 => "Sorry, your installation is incomplete, and cannot use the database connection software."));
@@ -99,6 +76,39 @@
 			}
 		} else {
 			return array( 0 => array(0 => "Sorry, your installation is not working, and cannot connect to your database. Are you sure your database is installed on this machine?"));	
+		}
+    
+    
+    }
+    
+    
+    function run_query($sql, $json, $no_results_msg = null) 
+    {
+    	
+		//Try running the query
+		$sql = clean_data($sql); //E.g. "SELECT CONCATENATE('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1";
+		$sql = str_replace("\\","", $sql);
+		
+		$result = odbc_db_query($json, $dbh, $sql);
+		
+		$errmsg = odbc_db_err_msg($json);
+		if($errmsg) {
+			error_log("Error: " . $errmsg);
+		}
+							
+		if(!$result->num_rows || is_null($result->num_rows)) {
+			
+		
+			$msg = "Sorry, there were no results";
+			if(isset($no_results_msg)) {
+				$msg = $no_results_msg;
+			}	
+			$retresult = array( 0 => array('result' => $msg));
+			return $retresult;
+		} else {
+			
+			//Success!
+			return $result;
 		}
 	}
     
@@ -264,17 +274,15 @@
 						
 						if($mydb) {
 							
-							foreach($sql_queries as $sql_query) {
-								//Replace the string [SEARCH] in the SQL, with our actual search term
-								$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
+							if($new_messages = connect_to_db($mydb)) {
+								foreach($sql_queries as $sql_query) {
+									//Replace the string [SEARCH] in the SQL, with our actual search term
+									$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
 							
-								if($verbose) error_log("Final sql:" . $final_sql);		
-						
-								
-							
-							
-								//Run the db queries
-								$new_messages = run_query($final_sql, $mydb, $no_result);
+									if($verbose) error_log("Final sql:" . $final_sql);	
+									//Run the db queries
+									$new_messages = run_query($final_sql, $mydb, $no_result);
+								}
 							}
 						
 							if($verbose) error_log("returned from query:" . json_encode($new_messages));

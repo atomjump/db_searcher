@@ -25,9 +25,11 @@ CREATE INDEX ispublic ON tbl_ssshout(int_whisper_to_id);
 
 Then include the following SQL queries to provide a free text search in your config.json 'sqlQueries' array:
 ```
-DROP TABLE IF EXISTS best_options;
-CREATE TEMPORARY TABLE best_options SELECT var_shouted, int_whisper_to_id FROM tbl_ssshout WHERE MATCH(var_shouted) AGAINST('[SEARCH]' IN BOOLEAN MODE) LIMIT 200;
-SELECT * FROM best_options WHERE int_whisper_to_id IS NULL LIMIT 10;
+"sqlQueries": [ 
+	"DROP TABLE IF EXISTS best_options",
+	"CREATE TEMPORARY TABLE best_options SELECT var_shouted, int_whisper_to_id FROM tbl_ssshout WHERE MATCH(var_shouted) AGAINST('[SEARCH]' IN BOOLEAN MODE) LIMIT 200",
+	"SELECT var_shouted FROM best_options WHERE int_whisper_to_id IS NULL LIMIT 10"
+]
 ```
 
 For small sites, you can potentially use a MYISAM table, rather than an innodb table before creating the index. We cannot guarantee that will work in multiple server sites, however.
@@ -38,7 +40,7 @@ ALTER TABLE tbl_ssshout ENGINE = MYISAM;
 
 ## Searching a generic MySQL database
 
-E.g. in your config.json 'sqlQuery' field:
+E.g. in your config.json 'sqlQueries' array:
 ```
 SELECT CONCAT(var_name, ' ', var_description) AS result FROM tbl_bike WHERE var_name LIKE '%[SEARCH]%' OR var_description LIKE '%[SEARCH]%' LIMIT 10
 ```
@@ -52,7 +54,7 @@ Create the index first:
 CREATE FULLTEXT INDEX searcher ON tbl_bike(var_name, var_description);
 ```
 
-Then in your config.json 'sqlQuery' field:
+Then in your config.json 'sqlQueries' array:
 ```
 SELECT var_name FROM tbl_bike WHERE MATCH(var_name, var_description) AGAINST('[SEARCH]' IN BOOLEAN MODE)
 ```
