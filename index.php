@@ -63,26 +63,26 @@
 				if(!$dbh) {
 					$errmsg = odbc_db_err_msg($json);
 		
-					return array( 0 => array(0 => "Sorry, I could not connect to the database. Please check your username, password, database file and host parameters."));
+					return array( array( 0 => array(0 => "Sorry, I could not connect to the database. Please check your username, password, database file and host parameters.")), false);
 					
 				} else {
 					//Connected OK!
-					return true;
+					return array(true, $dbh);
 					
 				}
 			} catch (Exception $e) {
-				return array( 0 => array(0 => "Sorry, your installation is incomplete, and cannot use the database connection software."));
+				return array( array( 0 => array(0 => "Sorry, your installation is incomplete, and cannot use the database connection software.")), false);
 
 			}
 		} else {
-			return array( 0 => array(0 => "Sorry, your installation is not working, and cannot connect to your database. Are you sure your database is installed on this machine?"));	
+			return array( array( 0 => array(0 => "Sorry, your installation is not working, and cannot connect to your database. Are you sure your database is installed on this machine?")), false);	
 		}
     
     
     }
     
     
-    function run_query($sql, $json, $no_results_msg = null) 
+    function run_query($sql, $json, $dbh, $no_results_msg = null) 
     {
     	
 		//Try running the query
@@ -97,8 +97,6 @@
 		}
 							
 		if(!$result->num_rows || is_null($result->num_rows)) {
-			
-		
 			$msg = "Sorry, there were no results";
 			if(isset($no_results_msg)) {
 				$msg = $no_results_msg;
@@ -274,16 +272,18 @@
 						
 						if($mydb) {
 							
-							if($new_messages = connect_to_db($mydb)) {
+							list($new_messages, $dbh) = connect_to_db($mydb);
+							
+							if($dbh) {
 								foreach($sql_queries as $sql_query) {
 									//Replace the string [SEARCH] in the SQL, with our actual search term
 									$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
 							
 									if($verbose) error_log("Final sql:" . $final_sql);	
 									//Run the db queries
-									$new_messages = run_query($final_sql, $mydb, $no_result);
+									$new_messages = run_query($final_sql, $mydb, $dbh, $no_result);
 								}
-							}
+							} 
 						
 							if($verbose) error_log("returned from query:" . json_encode($new_messages));
 						
