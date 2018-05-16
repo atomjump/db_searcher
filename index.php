@@ -237,7 +237,7 @@
 					$options = array('notification' => false, 'allow_plugins' => false);		//turn off any notifications from these messages
 					
 					if($verbose) error_log("message:" . $message);
-					if($verbose) error_log("user_queries[0]:" .  $user_queries[0]);
+					if($verbose) error_log("user_queries:" .  json_encode($user_queries));
 					
 					//Find the user queries of this
 					$our_search = parse_message($message, $user_queries);
