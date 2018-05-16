@@ -27,12 +27,12 @@
     		if($matches[1]) {
     			$ret = str_replace("\\r", '', $matches[1]);
     			$ret = str_replace("\\n", '', $ret);
-    			return $ret;
-    		} else {
-    			return false;
+    			return $ret;		//Early out return
     		}
     		
     	}
+    	
+    	return false;
     
     
     }
