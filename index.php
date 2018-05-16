@@ -173,7 +173,7 @@
                     $new_message = $db_searcher_config['forums'][$cnt]['message'];
                     $helper = $db_searcher_config['forums'][$cnt]['helperName'];
                     $helper_email = $db_searcher_config['forums'][$cnt]['helperEmail'];
-                    $sql_query = $db_searcher_config['forums'][$cnt]['sqlQuery'];
+                    $sql_queries = $db_searcher_config['forums'][$cnt]['sqlQueries'];
 					$db_id = $db_searcher_config['forums'][$cnt]['dbId'];
 					$no_result = $db_searcher_config['forums'][$cnt]['noResult'];
                     $send = true;
@@ -182,7 +182,7 @@
                         $user_queries = $db_searcher_config['forums'][$cnt]['userQueries'];
                         $helper = $db_searcher_config['forums'][$cnt]['helperName'];
                         $helper_email = $db_searcher_config['forums'][$cnt]['helperEmail'];
-                        $sql_query = $db_searcher_config['forums'][$cnt]['sqlQuery'];
+                        $sql_queries = $db_searcher_config['forums'][$cnt]['sqlQueries'];
 						$db_id = $db_searcher_config['forums'][$cnt]['dbId'];
 						$no_result = $db_searcher_config['forums'][$cnt]['noResult'];
                         $send = true;
@@ -210,7 +210,7 @@
 						$new_message = $forum_config->message;
 						$helper = $forum_config->helperName;
 						$helper_email = $forum_config->helperEmail;
-						$sql_query = $forum_config->sqlQuery;
+						$sql_queries = $forum_config->sqlQueries;
 						$db_id = $forum_config->dbId;
 						$no_result = $forum_config->noResult;
             		}
