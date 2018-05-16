@@ -128,11 +128,11 @@
                 if($data) {
                     $db_searcher_config = json_decode($data, true);
                     if(!isset($db_searcher_config)) {
-                        echo "Error: db_searcher config/config.json is not valid JSON.";
+                        error_log("Error: db_searcher config/config.json is not valid JSON.");
                         exit(0);
                     }
                 } else {
-                    echo "Error: Missing config/config.json in db_searcher plugin.";
+                    error_log("Error: Missing config/config.json in db_searcher plugin.");
                     exit(0);
                 }
             }
