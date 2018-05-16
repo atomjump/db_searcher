@@ -23,9 +23,11 @@ CREATE FULLTEXT INDEX searcher ON tbl_ssshout(var_shouted);
 CREATE INDEX ispublic ON tbl_ssshout(int_whisper_to_id);
 ```
 
-Then include the following SQL to provide a free text search in your config.json 'sqlQuery' field:
+Then include the following SQL queries to provide a free text search in your config.json 'sqlQueries' array:
 ```
-SELECT var_shouted FROM tbl_ssshout WHERE MATCH(var_shouted) AGAINST('[SEARCH]' IN BOOLEAN MODE) AND int_whisper_to_id IS NULL LIMIT 10
+DROP TABLE IF EXISTS best_options;
+CREATE TEMPORARY TABLE best_options SELECT var_shouted, int_whisper_to_id FROM tbl_ssshout WHERE MATCH(var_shouted) AGAINST('[SEARCH]' IN BOOLEAN MODE) LIMIT 200;
+SELECT * FROM best_options WHERE int_whisper_to_id IS NULL LIMIT 10;
 ```
 
 For small sites, you can potentially use a MYISAM table, rather than an innodb table before creating the index. We cannot guarantee that will work in multiple server sites, however.

@@ -112,7 +112,7 @@
         public function on_message($message_forum_id, $message, $message_id, $sender_id, $recipient_id, $sender_name, $sender_email, $sender_phone)
         {
         
-       		$verbose = false;
+       		$verbose = true;		//TESTING in true state - this should be false
 
         
                       
@@ -219,139 +219,142 @@
             }
             
             
+            if($verbose == true) error_log("User queries: " . json_encode($user_queries));
+            
             
          
             
-            if($sender_email == $helper_email) {
-                //Don't react to this message
-                error_log("Sender email is same as helper email");
-            } else {
-                if($helper_email != "") {
+           
+            if($helper_email != "") {
                 
-                     if($verbose) error_log("Send = " . $send);
-            
-                    //React to this message, it was from another user
-                    if($send == true) {
-                        //Get the forum id
-                                          
-                       
-                        $options = array('notification' => false, 'allow_plugins' => false);		//turn off any notifications from these messages
-                        
-                        if($verbose) error_log("message:" . $message);
-                        if($verbose) error_log("user_queries[0]:" .  $user_queries[0]);
-                        
-                        //Find the user queries of this
-                        $our_search = parse_message($message, $user_queries);
-                        
-                        
-                        
-                        
-                        
-                        if($verbose) error_log("Our search:" . $our_search);
-                        
-                        
-                        
-                        
-                        if($our_search !== false) {
-                        	//Yes, we were a matching request - run a query against the database and respond 
-                        	
-                        	//Replace the string [SEARCH] in the SQL, with our actual search term
-                        	$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
-                        	
-                        	if($verbose) error_log("Final sql:" . $final_sql);
-                        	if($verbose) error_log("DB id:" . $db_id);
-                        	
-                        	$mydb = array();
-                        	foreach($db_searcher_config['databases'] as $database) {
-                        		if($database['dbId'] == $db_id) {
-                        			$mydb = $database;
-                        			if($verbose) error_log("Database name selected:" . $database['dbname']);
-                        		}
-                        	}
-                        	
-                        	if($mydb) {
-								$sender_ip = $api->get_current_user_ip();
+				if($verbose) error_log("Send = " . $send);
+		
+				//React to this message, it was from another user
+				if($send == true) {
+					//Get the forum id
+									  
+				   
+					$options = array('notification' => false, 'allow_plugins' => false);		//turn off any notifications from these messages
+					
+					if($verbose) error_log("message:" . $message);
+					if($verbose) error_log("user_queries[0]:" .  $user_queries[0]);
+					
+					//Find the user queries of this
+					$our_search = parse_message($message, $user_queries);
+					
+					if($verbose) error_log("Our search:" . $our_search);
+									 
+					
+					
+					if($our_search !== false) {
+						//Yes, we were a matching request - run a query against the database and respond 
+						
+						
+						
+						
+						
+						if($verbose) error_log("DB id:" . $db_id);
+					
+						$mydb = array();
+						foreach($db_searcher_config['databases'] as $database) {
+							if($database['dbId'] == $db_id) {
+								$mydb = $database;
+								if($verbose) error_log("Database name selected:" . $database['dbname']);
+							}
+						}
+						
+						if($mydb) {
+							
+							foreach($sql_queries as $sql_query) {
+								//Replace the string [SEARCH] in the SQL, with our actual search term
+								$final_sql = str_replace("[SEARCH]", $our_search, $sql_query);
+							
+								if($verbose) error_log("Final sql:" . $final_sql);		
+						
 								
-								//Prep all the messages to send
-								$all_messages = array();
-								
-								
-								//Run the db query
+							
+							
+								//Run the db queries
 								$new_messages = run_query($final_sql, $mydb, $no_result);
+							}
+						
+							if($verbose) error_log("returned from query:" . json_encode($new_messages));
+						
+							$sender_ip = $api->get_current_user_ip();
 							
-								if($verbose) error_log("returned from query:" . json_encode($new_messages));
-							
-								$new_message = odbc_db_fetch_array($mydb, $new_messages);
-								if($new_message[0] && $new_message[0] != "") {
-									
-									if($verbose) error_log("Got one row: " . json_encode($new_message));
-									if($verbose) error_log("Result prepping to message: " . $new_message[0]);
-									
-									
-									$all_messages[] = $new_message[0];
+							//Prep all the messages to send
+							$all_messages = array();
+						
+							$new_message = odbc_db_fetch_array($mydb, $new_messages);
+							if($new_message[0] && $new_message[0] != "") {
 								
-									
-									if($verbose) error_log("Finished sending 1st message");
-									
-									$cnt = 1;
-									
-									//Do any further results
-									while($new_message = odbc_db_fetch_array($mydb, $new_messages)) {
-										if($cnt < $db_searcher_config['maxDisplayMessages']) {
-											if($verbose) error_log("Result prepping to message: " . $new_message[0]);
-											$all_messages[] = $new_message[0];						
-											
-										} else {
-											break;
-										}
-										$cnt++;
+								if($verbose) error_log("Got one row: " . json_encode($new_message));
+								if($verbose) error_log("Result prepping to message: " . $new_message[0]);
+								
+								
+								$all_messages[] = $new_message[0];
+							
+								
+								if($verbose) error_log("Finished sending 1st message");
+								
+								$cnt = 1;
+								
+								//Do any further results
+								while($new_message = odbc_db_fetch_array($mydb, $new_messages)) {
+									if($cnt < $db_searcher_config['maxDisplayMessages']) {
+										if($verbose) error_log("Result prepping to message: " . $new_message[0]);
+										$all_messages[] = $new_message[0];						
+										
+									} else {
+										break;
 									}
+									$cnt++;
+								}
+								
+								
+							} else {
+								//Do a no result or error message
+								$all_messages[] = $no_result;
+							}
+						
+							if($verbose) error_log("Message has been queued successfully.");
+							
+							//Now send the messages. Switch back to the main database.
+							odbc_dbclose();			//Clear off our current database connection again, to allow a reconnect
+							//Reconnect to our main database
+							global $db_host;
+							global $db_username;
+							global $db_password;
+							global $db_name;
+							global $db;
+							
+							$db = dbconnect($db_host, $db_username, $db_password);
+							dbselect($db_name);
+							db_set_charset('utf8');
+							db_misc();
+							
+							if($verbose) error_log("db is now:" . json_encode($db));
+							
+							if($db) {
+								foreach($all_messages as $this_message) {
+									if($verbose) error_log("Result about to message: " . $this_message);
 									
+									$this_message = highlight_keywords($this_message, $our_search);
 									
-								} else {
-									//Do a no result or error message
-									$all_messages[] = $no_result;
+									//Send the message
+									$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
+									
 								}
 							
-								if($verbose) error_log("Message has been queued successfully.");
-								
-								//Now send the messages. Switch back to the main database.
-								odbc_dbclose();			//Clear off our current database connection again, to allow a reconnect
-								//Reconnect to our main database
-								global $db_host;
-								global $db_username;
-								global $db_password;
-								global $db_name;
-								global $db;
-								
-								$db = dbconnect($db_host, $db_username, $db_password);
-								dbselect($db_name);
-								db_set_charset('utf8');
-								db_misc();
-								
-								if($verbose) error_log("db is now:" . json_encode($db));
-								
-								if($db) {
-									foreach($all_messages as $this_message) {
-										if($verbose) error_log("Result about to message: " . $this_message);
-										
-										$this_message = highlight_keywords($this_message, $our_search);
-										
-										//Send the message
-										$new_message_id = $api->new_message($helper, $this_message, $sender_ip . ":" . $sender_id, $helper_email, $sender_ip, $message_forum_id, $options);
-										
-									}
-								
-								}
-															
-								 
-							  }		//End of if mydb
-                       	 }   //End of our search
-                    }  //End of our send                  
-                    	
-                }     //End of helper
+							}
+														
+							 
+						  }		//End of if mydb
+					 }   //End of our search
+				}  //End of our send                  
+					
+			}     //End of helper
             	
-             }     //end of helper_email not blank   
                 
 			return true;
 		} 	// End of on_message

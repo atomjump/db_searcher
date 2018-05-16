@@ -27,7 +27,9 @@
             	"give me details on [SEARCH]",
             	"please give me details on [SEARCH]"
             ],
-            "sqlQuery": "SELECT CONCAT('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
+            "sqlQueries": [
+            	 "SELECT CONCAT('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1"
+            ],
             "noResult": "Sorry, there were no results.",
             "helperName": "Found",
             "helperEmail": "yourname@yourcompany.com"
@@ -43,7 +45,11 @@
             	"give me details on [SEARCH]",
             	"please give me details on [SEARCH]"
             ],
-            "sqlQuery": "SELECT CONCAT('Found - ', field1, field2) AS result FROM table WHERE field1 LIKE '%[SEARCH]' LIMIT 1",
+            "sqlQueries": [
+            	 "DROP TABLE IF EXISTS best_options",
+				 "CREATE TEMPORARY TABLE best_options SELECT var_shouted, int_whisper_to_id FROM tbl_ssshout WHERE MATCH(var_shouted) AGAINST('[SEARCH]' IN BOOLEAN MODE) LIMIT 200",
+				 "SELECT var_shouted AS result FROM best_options WHERE int_whisper_to_id IS NULL LIMIT 10"
+            ]
             "noResult": "Sorry, there were no results.",
             "helperName": "Found",
             "helperEmail": "yourname@yourcompany.com"
@@ -54,7 +60,7 @@
             "userQueries" : [
             	"Text strings representing the whole message as entered by a user submitting a message. The entry with [SEARCH] becomes a part of the SQL query."
             ],
-            "sqlQuery": "Any SQL query which responds with a single section of text as the field 'result'",
+            "sqlQueries": "Any SQL queries to run against your database. The final query should respond with the 1st field being used as the textual results.",
             "noResult": "Message when there are no results",
             "helperName": "Any helper name for this forum",
             "helperEmail": "This email must be set, and must not be anyone else's email."
