@@ -334,7 +334,7 @@
 							if($verbose) error_log("Message has been queued successfully.");
 							
 							//Now send the messages. Switch back to the main database.
-							odbc_dbclose();			//Clear off our current database connection again, to allow a reconnect
+							odbc_dbclose(null);			//Clear off our current database connection again, to allow a reconnect
 							//Reconnect to our main database
 							global $db_host;
 							global $db_username;
