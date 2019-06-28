@@ -1,4 +1,13 @@
 <?php
+	function trim_trailing_slash_local($str) {
+        return rtrim($str, "/");
+    }
+    
+    function add_trailing_slash_local($str) {
+        //Remove and then add
+        return rtrim($str, "/") . '/';
+    }
+
 	if(!isset($db_searcher_config)) {
         //Get global plugin config - but only once
 		$path = dirname(__FILE__) . "/config/config.json";
@@ -19,7 +28,7 @@
   
     }
  
-	$start_path = $db_searcher_config['serverPath'];
+	$start_path = add_trailing_slash_local($db_searcher_config['serverPath']);
 	
 	$staging = $db_searcher_config['staging'];
 	$notify = false;
