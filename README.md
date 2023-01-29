@@ -1,5 +1,7 @@
 <img src="https://atomjump.com/images/logo80.png">
 
+__WARNING: this project has now moved to https://src.atomjump.com/atomjump/db_searcher.git__
+
 # db_searcher
 Searches your database when you enter 'details [query]' into an AtomJump Messaging window
 
